@@ -25,10 +25,11 @@ class Habit(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     duration = db.Column(db.Integer)
-    daily = db.Column(db.Boolean)
-    weekly = db.Column(db.Boolean)
-    monthly = db.Column(db.Boolean)
-    yearly = db.Column(db.Boolean)
+    daily = db.Column(db.String)
+    weekly = db.Column(db.String)
+    monthly = db.Column(db.String)
+    yearly = db.Column(db.String)
+    day1 = db.Column(db.String)
 
     users = db.relationship(
         'User', secondary="habit_entries", back_populates='habits')

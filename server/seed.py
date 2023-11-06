@@ -17,51 +17,51 @@ def create_habits():
     habits = []
 
     # Body
-    h1 = Habit(name = "Walk", daily=False, weekly=False, monthly=False, yearly=False,)
+    h1 = Habit(name = "Walk", daily='true', weekly='false', monthly='false', day1="false",)
     habits.append(h1)
-    h2 = Habit(name = "Run", daily=False, weekly=False, monthly=False, yearly=False,)
+    h2 = Habit(name = "Run", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h2)
-    h3 = Habit(name = "Strech", daily=False, weekly=False, monthly=False, yearly=False,)
+    h3 = Habit(name = "Strech", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h3)
-    h4 = Habit(name = "Exercise", daily=False, weekly=False, monthly=False, yearly=False,)
+    h4 = Habit(name = "Exercise", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h4)
-    h5 = Habit(name = "Stand", daily=False, weekly=False, monthly=False, yearly=False,)
+    h5 = Habit(name = "Stand", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h5)
 
     # Mind
-    h6 = Habit(name = "Meditation", daily=False, weekly=False, monthly=False, yearly=False,)
+    h6 = Habit(name = "Meditation", daily='true', weekly='false', monthly='false', day1="false",)
     habits.append(h6)
-    h7 = Habit(name = "Read a book", daily=False, weekly=False, monthly=False, yearly=False,)
+    h7 = Habit(name = "Read a book", daily='true', weekly='false', monthly='false', day1="false",)
     habits.append(h7)
-    h8 = Habit(name = "Study", daily=False, weekly=False, monthly=False, yearly=False,)
+    h8 = Habit(name = "Study", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h8)
-    h9 = Habit(name = "Breathe", daily=False, weekly=False, monthly=False, yearly=False,)
+    h9 = Habit(name = "Breathe", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h9)
-    h10 = Habit(name = "Review Today", daily=False, weekly=False, monthly=False, yearly=False,)
+    h10 = Habit(name = "Review Today", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h10)
 
     # Health
-    h11 = Habit(name = "Drink Water", daily=False, weekly=False, monthly=False, yearly=False,)
+    h11 = Habit(name = "Drink Water", daily='true', weekly='false', monthly='false', day1="false",)
     habits.append(h11)
-    h12 = Habit(name = "Eat Breakfast", daily=False, weekly=False, monthly=False, yearly=False,)
+    h12 = Habit(name = "Eat Breakfast", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h12)
-    h13 = Habit(name = "Eat Vegtables", daily=False, weekly=False, monthly=False, yearly=False,)
+    h13 = Habit(name = "Eat Vegtables", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h13)
-    h14 = Habit(name = "Sleep Early", daily=False, weekly=False, monthly=False, yearly=False,)
+    h14 = Habit(name = "Sleep Early", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h14)
-    h15 = Habit(name = "No Sweets", daily=False, weekly=False, monthly=False, yearly=False,)
+    h15 = Habit(name = "No Sweets", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h15)
 
     # Lifestyle
-    h16 = Habit(name = "Call Parents", daily=False, weekly=False, monthly=False, yearly=False,)
+    h16 = Habit(name = "Call Parents", daily='false', weekly='true', monthly='false', day1="false",)
     habits.append(h16)
-    h17 = Habit(name = "Contact a Friend", daily=False, weekly=False, monthly=False, yearly=False,)
+    h17 = Habit(name = "Contact a Friend", daily='false', weekly='false', monthly='false', day1="false",)
     habits.append(h17)
-    h18 = Habit(name = "Save Money", daily=False, weekly=False, monthly=False, yearly=False,)
+    h18 = Habit(name = "Save Money", daily='false', weekly='false', monthly='true', day1="false",)
     habits.append(h18)
-    h19 = Habit(name = "Track Expenses", daily=False, weekly=False, monthly=False, yearly=False,)
+    h19 = Habit(name = "Track Expenses", daily='false', weekly='false', monthly='true', day1="false",)
     habits.append(h19)
-    h20 = Habit(name = "Journal", daily=False, weekly=False, monthly=False, yearly=False,)
+    h20 = Habit(name = "Journal", daily='false', weekly='true', monthly='false', day1="false",)
     habits.append(h20)
 
     return habits
@@ -72,7 +72,7 @@ def create_users():
         u = User(
             username = fake.user_name(),
             age = randint(18, 90),
-            _password_hash = fake.password(),
+            _password_hash = "1234",
             image_url = fake.image_url()
         )
         users.append(u)

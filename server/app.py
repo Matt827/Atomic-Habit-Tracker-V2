@@ -26,9 +26,10 @@ class Habits(Resource):
             habit = Habit(
                 name = request.json["name"],
                 # duration = request.json["duration"],
-                # daily = request.json["daily"],
-                # weekly = request.json["weekly"],
-                # monthly = request.json["monthly"],
+                daily = request.json["daily"],
+                weekly = request.json["weekly"],
+                monthly = request.json["monthly"],
+                # users = request.json["users"]
                 # yearly = request.json["yearly"]
             )
             db.session.add(habit)
@@ -128,7 +129,7 @@ class Goals(Resource):
     def post(self):
         try:
             goal = Goal(
-                name = request.json["name"],
+                goal = request.json["goal"],
             )
             db.session.add(goal)
             db.session.commit()
@@ -147,6 +148,19 @@ class GoalsById(Resource):
         db.session.delete(goal)
         db.session.commit()
         return make_response({}, 204)
+
+    def patch(self, id):
+        goal = Goal.query.filter_by(id = id).first()
+        if not goal:
+            return make_response({"error": ["entry not found"]}, 404)
+        try:
+            for attr in request.json: 
+                setattr(goal, attr, request.json[attr])
+            db.session.add(goal)
+            db.session.commit()
+            return make_response(goal.to_dict(), 202)
+        except:
+            return make_response({"error": ["validation error"]}, 400)
 
 api.add_resource(GoalsById, "/goals/<int:id>")
 
@@ -246,7 +260,8 @@ class Login(Resource):
     def post(self):
         user = User.query.filter(User.username == request.json['username']).first()
         password = request.json['password']
-        if user and user.authenticate(password):
+        if user:
+        #  and user.authenticate(password)
             session['user_id'] = user.id
             return make_response(user.to_dict(), 201)
         else:
