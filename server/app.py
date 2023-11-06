@@ -25,14 +25,16 @@ class Habits(Resource):
         try:
             habit = Habit(
                 name = request.json["name"],
-                # duration = request.json["duration"],
                 daily = request.json["daily"],
                 weekly = request.json["weekly"],
                 monthly = request.json["monthly"],
-                # users = request.json["users"]
-                # yearly = request.json["yearly"]
             )
+            user = request.json["user"]
             db.session.add(habit)
+            db.session.commit()
+
+            habitEntry = HabitEntry(user_id = user["id"], habit_id = habit.id)
+            db.session.add(habitEntry)
             db.session.commit()
             return make_response(habit.to_dict(), 201)
         except:
