@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 63f502505612
+Revision ID: 92cef021a825
 Revises: 
-Create Date: 2023-11-05 17:48:04.518435
+Create Date: 2023-11-07 15:24:56.230996
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '63f502505612'
+revision = '92cef021a825'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,6 +27,41 @@ def upgrade():
     sa.Column('monthly', sa.String(), nullable=True),
     sa.Column('yearly', sa.String(), nullable=True),
     sa.Column('day1', sa.String(), nullable=True),
+    sa.Column('day2', sa.String(), nullable=True),
+    sa.Column('day3', sa.String(), nullable=True),
+    sa.Column('day4', sa.String(), nullable=True),
+    sa.Column('day5', sa.String(), nullable=True),
+    sa.Column('day6', sa.String(), nullable=True),
+    sa.Column('day7', sa.String(), nullable=True),
+    sa.Column('day8', sa.String(), nullable=True),
+    sa.Column('day9', sa.String(), nullable=True),
+    sa.Column('day10', sa.String(), nullable=True),
+    sa.Column('day11', sa.String(), nullable=True),
+    sa.Column('day12', sa.String(), nullable=True),
+    sa.Column('day13', sa.String(), nullable=True),
+    sa.Column('day14', sa.String(), nullable=True),
+    sa.Column('day15', sa.String(), nullable=True),
+    sa.Column('day16', sa.String(), nullable=True),
+    sa.Column('day17', sa.String(), nullable=True),
+    sa.Column('day18', sa.String(), nullable=True),
+    sa.Column('day19', sa.String(), nullable=True),
+    sa.Column('day20', sa.String(), nullable=True),
+    sa.Column('day21', sa.String(), nullable=True),
+    sa.Column('day22', sa.String(), nullable=True),
+    sa.Column('day23', sa.String(), nullable=True),
+    sa.Column('day24', sa.String(), nullable=True),
+    sa.Column('day25', sa.String(), nullable=True),
+    sa.Column('day26', sa.String(), nullable=True),
+    sa.Column('day27', sa.String(), nullable=True),
+    sa.Column('day28', sa.String(), nullable=True),
+    sa.Column('day29', sa.String(), nullable=True),
+    sa.Column('day30', sa.String(), nullable=True),
+    sa.Column('day31', sa.String(), nullable=True),
+    sa.Column('week1', sa.String(), nullable=True),
+    sa.Column('week2', sa.String(), nullable=True),
+    sa.Column('week3', sa.String(), nullable=True),
+    sa.Column('week4', sa.String(), nullable=True),
+    sa.Column('month1', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('users',

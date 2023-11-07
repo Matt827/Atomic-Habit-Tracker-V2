@@ -18,7 +18,7 @@ def index():
 
 class Habits(Resource):
     def get(self):
-        habits = [habit.to_dict(rules=("-habit_entries",)) for habit in Habit.query.all()]
+        habits = [habit.to_dict() for habit in Habit.query.filter(Habit.user_id == session['user_id'])]
         return make_response(habits, 200)
 
     def post(self):
@@ -28,6 +28,42 @@ class Habits(Resource):
                 daily = request.json["daily"],
                 weekly = request.json["weekly"],
                 monthly = request.json["monthly"],
+                day1 = "false",
+                day2 = "false",
+                day3 = "false",
+                day4 = "false",
+                day5 = "false",
+                day6 = "false",
+                day7 = "false",
+                day8 = "false",
+                day9 = "false",
+                day10 = "false",
+                day11 = "false",
+                day12 = "false",
+                day13 = "false",
+                day14 = "false",
+                day15 = "false",
+                day16 = "false",
+                day17 = "false",
+                day18 = "false",
+                day19 = "false",
+                day20 = "false",
+                day21 = "false",
+                day22 = "false",
+                day23 = "false",
+                day24 = "false",
+                day25 = "false",
+                day26 = "false",
+                day27 = "false",
+                day28 = "false",
+                day29 = "false",
+                day30 = "false",
+                day31 = "false",
+                week1 = "false",
+                week2 = "false",
+                week3 = "false",
+                week4 = "false",
+                month1 = "false"
             )
             user = request.json["user"]
             db.session.add(habit)
@@ -63,6 +99,7 @@ class HabitsById(Resource):
             return make_response({"error": ["habit not found"]}, 404)
         try:
             for attr in request.json:
+                print(attr, request.json[attr])
                 setattr(habit, attr, request.json[attr])
             db.session.add(habit)
             db.session.commit()
@@ -74,7 +111,7 @@ api.add_resource(HabitsById, "/habits/<int:id>")
 
 class Users(Resource):
     def get(self):
-        users = [user.to_dict(rules = ("-habit_entries",)) for user in User.query.all()]
+        users = [user.to_dict(rules=("-habit_entries.user", "-habit_entries.habit", )) for user in User.query.all()]
         return make_response(users, 200)
 
     def post(self):
