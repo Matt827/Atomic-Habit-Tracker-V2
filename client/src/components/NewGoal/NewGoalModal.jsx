@@ -105,13 +105,14 @@ const NewGoalModal = ({user, handleAddGoal}) => {
         .then(data => {
           console.log(data)
           handleAddGoal(data)
+          setGoalName("")
           handleClose()
         })
     }
 
   return (
     <NewGoalContainer>
-        <button onClick={handleShow}><img src='images/add.png' alt="edit-habit-btn"/>ADD A HABIT</button>
+        <button onClick={handleShow}><img src='images/add.png' alt="edit-habit-btn"/>ADD A GOAL</button>
         
         <Modal
         show={show}

@@ -73,7 +73,7 @@ function EditHabitModal({habit, handleUpdateDailyHabit, handleUpdateWeeklyHabit,
     const handleShow = () => setShow(true);
 
     const handleEditSubmit = (e) => {
-        // e.preventDefault();
+        e.preventDefault();
 
         fetch("/habits/" + habit.id, {
             method: "PATCH",
@@ -94,6 +94,7 @@ function EditHabitModal({habit, handleUpdateDailyHabit, handleUpdateWeeklyHabit,
             handleUpdateMonthlyHabit(data)
           }
             console.log(data)
+            setHabitName("")
             handleClose()
         })
     }

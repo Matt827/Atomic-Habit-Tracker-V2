@@ -489,6 +489,12 @@ const Habits = ({user, forceUpdate}) => {
 	function handleAddDailyHabit(newHabit) {
 		setDailyHabits([...dailyHabits, newHabit])
 	}
+	function handleAddWeeklyHabit(newHabit) {
+		setWeeklyHabits([...weeklyHabits, newHabit])
+	}
+	function handleAddMonthlyHabit(newHabit) {
+		setMonthlyHabits([...monthlyHabits, newHabit])
+	}
 
 	// function handleUpdateHabitEntries(data) {
 	// 	const updatedEntries = userHabitEntries.map(entry => {
@@ -528,7 +534,7 @@ const Habits = ({user, forceUpdate}) => {
             <HabitsHeader>
             <TitleSection>habits</TitleSection>
                 <AddHabitButton >
-					<NewHabitModal user={user} handleAddDailyHabit={handleAddDailyHabit}/>
+					<NewHabitModal user={user} handleAddDailyHabit={handleAddDailyHabit} handleAddWeeklyHabit={handleAddWeeklyHabit} handleAddMonthlyHabit={handleAddMonthlyHabit}/>
                     {/* <StyledLink to='/newhabit'><img src='images/add.png' alt="add-habit-btn" />add a habit</StyledLink> */}
                 </AddHabitButton>
             </HabitsHeader>

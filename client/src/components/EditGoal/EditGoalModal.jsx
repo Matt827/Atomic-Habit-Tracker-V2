@@ -85,6 +85,7 @@ function EditGoalModal({goal, handleUpdateGoal}) {
         .then(data => {
             handleUpdateGoal(data)
             console.log(data)
+            setGoalName("")
             handleClose()
         })
     }

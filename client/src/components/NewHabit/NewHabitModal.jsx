@@ -82,7 +82,7 @@ const SubmitButton = styled.div`
   }
 `;
 
-const NewHabitModal = ({user, handleAddDailyHabit}) => {
+const NewHabitModal = ({user, handleAddDailyHabit, handleAddWeeklyHabit, handleAddMonthlyHabit}) => {
     const [habitName, setHabitName] = useState("")
     const [habitDaily, setHabitDaily] = useState("")
     const [habitWeekly, setHabitWeekly] = useState("")
@@ -110,7 +110,17 @@ const NewHabitModal = ({user, handleAddDailyHabit}) => {
         .then(res => res.json())
         .then(data => {
           console.log(data)
-		  handleAddDailyHabit(data)
+          if (data.daily === "true") {
+            handleAddDailyHabit(data)
+          } else if (data.weekly === "true") {
+            handleAddWeeklyHabit(data)
+          } else if (data.monthly === "true") {
+            handleAddMonthlyHabit(data)
+          }
+          setHabitName("")
+          setHabitDaily("")
+          setHabitWeekly("")
+          setHabitMonthly("")
           handleClose()
         })
     }
