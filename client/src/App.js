@@ -5,10 +5,12 @@ import Welcome from './components/Welcome';
 import MyHabits from './components/MyHabits';
 import Signup from './components/User/Signup';
 import Login from './components/User/Login';
-import NewHabitForm from './components/NewHabit/NewHabitForm'
+import Habits from './components/Habits';
 // import EditHabit from './components/EditHabit/EditHabit'
 import NewGoalForm from './components/NewGoal/NewGoalForm'
 // import EditGoal from './components/EditGoal/EditGoal'
+import NewHabitForm from './components/NewHabit/NewHabitForm'
+import Navigate from './components/Navigate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -29,9 +31,11 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Welcome/>} />
-        <Route path="/habits" element={<MyHabits user={user} setUser={user}/>} />
+        <Route path="/habits" element={<MyHabits user={user}/>} />
+        <Route path="/habitlist" element={<Habits user={user}/>} />
+        <Route path="/navigate" element={<Navigate user={user}/>} />
         <Route path="/newhabit" element={<NewHabitForm user={user}/>} />
-        <Route path="/newGoal" element={<NewGoalForm/>} />
+        <Route path="/newGoal" element={<NewGoalForm user={user}/>} />
         {/* <Route path="/edithabit" element={<EditHabit/>} /> */}
         {/* <Route path="/editgoal" element={<EditGoal/>} /> */}
         <Route path="/Signup" element={<Signup onLogin={setUser}/>} />

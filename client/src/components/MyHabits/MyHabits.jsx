@@ -51,12 +51,13 @@ const StyledLink = styled(Link)`
 `;
 
 const MyHabits = ({user}) => {
-    
+    const [, forceUpdate] = useState()
+
   return (
     <GridContainer>
         <NavCountainer>
             <Title>Atomic Habit Tracker</Title>
-            <Goals></Goals>
+            <Goals user={user}></Goals>
         </NavCountainer>
         
         <MainCountainer>
@@ -66,7 +67,7 @@ const MyHabits = ({user}) => {
                 <HeaderItem><StyledLink to='/login'>Login</StyledLink></HeaderItem>
                 <HeaderItem><StyledLink to='/signup'>Signup</StyledLink></HeaderItem>
             </HeaderContainer>
-            <Habits user={user}></Habits>
+            <Habits user={user} forceUpdate={() => forceUpdate({})}></Habits>
         </MainCountainer>
     </GridContainer>
   )

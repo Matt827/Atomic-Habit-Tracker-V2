@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import EditHabit from '../EditHabit/EditHabit';
 import EditHabitModal from '../EditHabit/EditHabitModal';
@@ -355,11 +356,13 @@ const habitNameStyle = {
 	"font-size": "20px",
 }
 
-const Habits = ({user}) => {
+const Habits = ({user, forceUpdate}) => {
 	const [dailyHabits, setDailyHabits] = useState([])
 	const [weeklyHabits, setWeeklyHabits] = useState([])
 	const [monthlyHabits, setMonthlyHabits] = useState([])
-	const [userHabitEntries, setUserHabitEntries] = useState([])
+	// const [userHabitEntries, setUserHabitEntries] = useState()
+	
+	const navigate = useNavigate();
 	
 	useEffect(() => {
 		fetch("/habits")
@@ -495,7 +498,6 @@ const Habits = ({user}) => {
 	// }
 
 	const handleClick = (entry, habit, value) => {
-
 		fetch("/habit_entries/" + entry.id, {
 			method: "PATCH",
             headers: {
@@ -510,8 +512,9 @@ const Habits = ({user}) => {
         })
         .then(res => res.json())
         .then(data => {
-			// console.log(data)
-			console.log(user)
+			console.log(data)
+			navigate("/navigate")
+			// forceUpdate()
 			// handleUpdateHabitEntries(data)
 		})
 	}
@@ -575,6 +578,7 @@ const Habits = ({user}) => {
 					<tr>
 						<th style={habitNameStyle}>{habit.name}</th>
 						{habit.h_entries.map((entry) => <td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id={`inlineCheckbox1`} value={entry.entry_performed_date} checked={entry.completed} onChange={(e) => handleClick(entry, habit, e.target.value)}/></td>)}
+
 						<td>
 							<Action>
 								<EditHabitModal habit={habit} handleUpdateDailyHabit={handleUpdateDailyHabit}/>
