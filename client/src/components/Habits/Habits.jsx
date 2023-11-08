@@ -360,15 +360,7 @@ const Habits = ({user}) => {
 	const [weeklyHabits, setWeeklyHabits] = useState([])
 	const [monthlyHabits, setMonthlyHabits] = useState([])
 	const [userHabitEntries, setUserHabitEntries] = useState([])
-
-	useEffect(() => {
-		const entryList = []
-		user.h_entries.forEach(entry => {
-			entryList.push(entry)
-		})
-		setUserHabitEntries(entryList)
-	}, [])
-
+	
 	useEffect(() => {
 		fetch("/habits")
 		.then(res => res.json())
@@ -379,9 +371,54 @@ const Habits = ({user}) => {
 					dailyHabits.push(habit)
 				}
 			})
-			setDailyHabits(dailyHabits)
+			const userHabits = []
+			dailyHabits.forEach(habit => {
+				if (habit.h_entries[0].user_id === user.id) {
+					userHabits.push(habit)
+				}
+			})
+			setDailyHabits(userHabits)
 		})
 	}, [])
+	useEffect(() => {
+		fetch("/habits")
+		.then(res => res.json())
+        .then(data => {
+			const weeklyHabits = []
+			data.forEach(habit => {
+				if (habit.weekly === "true") {
+					weeklyHabits.push(habit)
+				}
+			})
+			const userHabits = []
+			weeklyHabits.forEach(habit => {
+				if (habit.h_entries[0].user_id === user.id) {
+					userHabits.push(habit)
+				}
+			})
+			setWeeklyHabits(userHabits)
+		})
+	}, [])
+	useEffect(() => {
+		fetch("/habits")
+		.then(res => res.json())
+        .then(data => {
+			const monthlyHabits = []
+			data.forEach(habit => {
+				if (habit.monthly === "true") {
+					monthlyHabits.push(habit)
+				}
+			})
+			const userHabits = []
+			monthlyHabits.forEach(habit => {
+				if (habit.h_entries[0].user_id === user.id) {
+					userHabits.push(habit)
+				}
+			})
+			setMonthlyHabits(userHabits)
+		})
+	}, [])
+
 
 	function handleDeleteDailyHabit(deletedHabit) {
 		const updatedHabits = dailyHabits.filter(habit => habit.id !== deletedHabit.id)
@@ -398,39 +435,6 @@ const Habits = ({user}) => {
 		console.log(updatedHabits)
 		setMonthlyHabits(updatedHabits)
 	}
-
-	// useEffect(() => {
-	// 	const DailyHabitList = []
-	// 	user.habits.forEach(habit => {
-	// 		if (habit.daily == 'true') {
-	// 			DailyHabitList.push(habit)
-	// 		}
-	// 	})
-		
-	// 	setDailyHabits(DailyHabitList)
-	// }, [])
-
-	// useEffect(() => {
-	// 	const weeklyHabitList = []
-	// 	user.habits.forEach(habit => {
-	// 		if (habit.weekly == 'true') {
-	// 			weeklyHabitList.push(habit)
-	// 		}
-	// 	})
-		
-	// 	setWeeklyHabits(weeklyHabitList)
-	// }, [])
-
-	// useEffect(() => {
-	// 	const monthlyHabitList = []
-	// 	user.habits.forEach(habit => {
-	// 		if (habit.monthly == 'true') {
-	// 			monthlyHabitList.push(habit)
-	// 		}
-	// 	})
-		
-	// 	setMonthlyHabits(monthlyHabitList)
-	// }, [])
 
 	const handleDelete = (habit) => {
 		handleDeleteDailyHabit(habit)
@@ -479,45 +483,26 @@ const Habits = ({user}) => {
 		setMonthlyHabits(updatedHabits)
 	}
 
-	// function handleCheck(habit, day) {
-	// 	if (habit[day] === "true") {
-	// 		habit[day] = "false"
-	// 	} else if (habit[day] === "false") {
-	// 		habit[day] = "true"
-	// 	}
-	// 	fetch("/habits/" + habit.id, {
-	// 				method: "PATCH",
-	// 				headers: {
-	// 					"content-type" : "application/json"
-	// 				},
-	// 				body: JSON.stringify({
-	// 					[day] : habit[day]
-	// 				})
-	// 			})
-	// 			.then(res => res.json())
-	// 			.then(data => {
-	// 				console.log(data)
-	// 				const newList = dailyHabits.map(habit => {
-	// 					if (habit.id === data.id) {
-	// 						const updatedHabit = {
-	// 							...habit,
-	// 							[day] : habit[day],
-	// 						}
-	// 						return updatedHabit
-	// 					}
-	// 					return habit
-	// 				})
-	// 				setDailyHabits(newList)
-	// 			})
-	// 		 }
+	// function handleUpdateHabitEntries(data) {
+	// 	const updatedEntries = userHabitEntries.map(entry => {
+	// 		if (entry.id === data.id) {
+	// 			return ({...entry, completed: data.completed})
+	// 		} else {
+	// 			return entry
+	// 		}
+	// 	})
+	// 	setUserHabitEntries(updatedEntries)
+	// }
 
-    const handleClick = (habit, value) => {
-		fetch("/habit_entries", {
-			method: "POST",
+	const handleClick = (entry, habit, value) => {
+
+		fetch("/habit_entries/" + entry.id, {
+			method: "PATCH",
             headers: {
 				"content-type" : "application/json"
             },
             body: JSON.stringify({
+				completed: !entry.completed,
 				habit_id: habit.id,
                 user_id: user.id,
                 entry_performed_date: value
@@ -525,11 +510,12 @@ const Habits = ({user}) => {
         })
         .then(res => res.json())
         .then(data => {
-			console.log(data)
-			// setUserHabits([...userHabits, data])
+			// console.log(data)
+			console.log(user)
+			// handleUpdateHabitEntries(data)
 		})
 	}
-
+	
     return (
         <HabitsContainer>
             <HabitsHeader>
@@ -586,57 +572,17 @@ const Habits = ({user}) => {
 			<th>EDIT / DELETE</th>
 		</tr>
 		{dailyHabits.map((habit) => (
-				// <HabitRow key={habit.id}>
 					<tr>
-					<th style={habitNameStyle}>{habit.name}</th>
-
-					{/* <td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" checked={false} onClick={(e) => handleCheck(habit, "day1")}/></td>
-					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" checked={habit.day2} onClick={(e) => handleCheck(habit, "day2")}/></td>
-					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" checked={habit.day3} onClick={(e) => handleCheck(habit, "day3")}/></td>
-					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" checked={habit.day4} onClick={(e) => handleCheck(habit, "day4")}/></td> */}
-
-					{/* <td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="day1" checked={habit.habit_entries.some(entry => {entry.entry_performed_date == "day1"})} onClick={(e) => handleClick(habit, e.target.value)}/></td> */}
-
-					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week2BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week2BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week2BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week2BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week2BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week2BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week2BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week3BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week3BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week3BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week3BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week3BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week3BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week3BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week4BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week4BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week4BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week4BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week4BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week4BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={week4BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={extraDaysBoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={extraDaysBoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					<td style={extraDaysBoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
-					
-					<td>
-						<Action>
-							<EditHabitModal habit={habit} handleUpdateDailyHabit={handleUpdateDailyHabit}/>
-							/
-							<img src='images/delete.png' alt ="delete-habit-btn" onClick={(e) => handleDelete(habit)}/>
-						</Action>
-					</td>
+						<th style={habitNameStyle}>{habit.name}</th>
+						{habit.h_entries.map((entry) => <td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id={`inlineCheckbox1`} value={entry.entry_performed_date} checked={entry.completed} onChange={(e) => handleClick(entry, habit, e.target.value)}/></td>)}
+						<td>
+							<Action>
+								<EditHabitModal habit={habit} handleUpdateDailyHabit={handleUpdateDailyHabit}/>
+								/
+								<img src='images/delete.png' alt ="delete-habit-btn" onClick={(e) => handleDelete(habit)}/>
+							</Action>
+						</td>
 					</tr>
-				// </HabitRow>
 				))}
 				</StyledTable>
 	<StyledTable2>
@@ -648,24 +594,18 @@ const Habits = ({user}) => {
 			<th style={week4Style} >WEEK 4</th>
 			<th>EDIT / DELETE</th>
 		</tr>
-		{weeklyHabits.map((habit, index) => (
-				// <HabitRow key={index}>
+		{weeklyHabits.map((habit) => (
 					<tr>
-					<th style={habitNameStyle}></th>
-					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/>{habit.name}</td>
-					<td style={week2BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/>{habit.name}</td>
-					<td style={week3BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/>{habit.name}</td>
-					<td style={week4BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/>{habit.name}</td>
-				
-					<td>
-						<Action>
-							<EditHabitModal habit={habit} handleUpdateWeeklyHabit={handleUpdateWeeklyHabit}/>
-							/
-							<img src='images/delete.png' alt ="delete-habit-btn" onClick={(e) => handleDelete(habit)}/>
-						</Action>
-					</td>
+						<th style={habitNameStyle}>{habit.name}</th>
+						{habit.h_entries.map((entry) => <td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id={`inlineCheckbox1`} value={entry.entry_performed_date} checked={entry.completed} onChange={(e) => handleClick(entry, habit, e.target.value)}/></td>)}
+						<td>
+							<Action>
+								<EditHabitModal habit={habit} handleUpdateWeeklyHabit={handleUpdateWeeklyHabit}/>
+								/
+								<img src='images/delete.png' alt ="delete-habit-btn" onClick={(e) => handleDelete(habit)}/>
+							</Action>
+						</td>
 					</tr>
-				// </HabitRow>
 				))}
 	</StyledTable2>
 	<StyledTable3>
@@ -675,22 +615,19 @@ const Habits = ({user}) => {
 			<th style={week3Style} >NOTES</th>
 			<th>EDIT / DELETE</th>
 		</tr>
-		{monthlyHabits.map((habit, index) => (
-				// <HabitRow key={index}>
+		{monthlyHabits.map((habit) => (
 					<tr>
-					<th style={habitNameStyle}></th>
-					<td style={week2BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/>{habit.name}</td>
-					<td style={week3BoxStyle}></td>
-				
-					<td>
-						<Action>
-							<EditHabitModal habit={habit} handleUpdateMonthlyHabit={handleUpdateMonthlyHabit}/>
-							/
-							<img src='images/delete.png' alt ="delete-habit-btn" onClick={(e) => handleDelete(habit)}/>
-						</Action>
-					</td>
+						<th style={habitNameStyle}>{habit.name}</th>
+						{habit.h_entries.map((entry) => <td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id={`inlineCheckbox1`} value={entry.entry_performed_date} checked={entry.completed} onChange={(e) => handleClick(entry, habit, e.target.value)}/></td>)}
+						<td style={week1BoxStyle}></td>
+						<td>
+							<Action>
+								<EditHabitModal habit={habit} handleUpdateMonthlyHabit={handleUpdateMonthlyHabit}/>
+								/
+								<img src='images/delete.png' alt ="delete-habit-btn" onClick={(e) => handleDelete(habit)}/>
+							</Action>
+						</td>
 					</tr>
-				// </HabitRow>
 				))}
 	</StyledTable3>
         </HabitsContainer>

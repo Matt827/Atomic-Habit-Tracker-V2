@@ -29,7 +29,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Welcome/>} />
-        <Route path="/habits" element={<MyHabits user={user}/>} />
+        <Route path="/habits" element={<MyHabits user={user} setUser={user}/>} />
         <Route path="/newhabit" element={<NewHabitForm user={user}/>} />
         <Route path="/newGoal" element={<NewGoalForm/>} />
         {/* <Route path="/edithabit" element={<EditHabit/>} /> */}

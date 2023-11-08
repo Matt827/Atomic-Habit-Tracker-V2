@@ -103,7 +103,7 @@ const NewHabitForm = ({user}) => {
         .then(res => res.json())
         .then(data => {
           // PATCH request on User object
-          user.habits.push(data)
+          // user.habits.push(data)
           console.log(data)
           console.log(user)
           navigate("/habits")
