@@ -13,7 +13,7 @@ const PageTitle = styled.div`
   padding-left: 100px;
 `;
 
-const NewHabitContainer = styled.div`
+const NewGoalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -82,40 +82,35 @@ const SubmitButton = styled.div`
   }
 `;
 
-const NewHabitModal = ({user, handleAddDailyHabit}) => {
-    const [habitName, setHabitName] = useState("")
-    const [habitDaily, setHabitDaily] = useState("")
-    const [habitWeekly, setHabitWeekly] = useState("")
-    const [habitMonthly, setHabitMonthly] = useState("")
+const NewGoalModal = ({user, handleAddGoal}) => {
+    const [goalName, setGoalName] = useState("")
 
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const handleSubmit = (habitName, habitDaily, habitWeekly, habitMonthly) => {
-		fetch("/habits", {
+    const handleSubmit = (goalName) => {
+		fetch("/goals", {
             method: "POST",
             headers: {
                 "content-type" : "application/json"
             },
             body: JSON.stringify({
-                "name": habitName,
-                "daily": habitDaily,
-                "weekly": habitWeekly,
-                "monthly": habitMonthly,
-                "user": user
+                goal: goalName,
+                user_id: user.id,
             })
         })
         .then(res => res.json())
         .then(data => {
           console.log(data)
-		  handleAddDailyHabit(data)
+          handleAddGoal(data)
           handleClose()
         })
     }
+
   return (
-    <NewHabitContainer>
+    <NewGoalContainer>
         <button onClick={handleShow}><img src='images/add.png' alt="edit-habit-btn"/>ADD A HABIT</button>
         
         <Modal
@@ -125,58 +120,31 @@ const NewHabitModal = ({user, handleAddDailyHabit}) => {
         keyboard={false}
         >
         <Modal.Header closeButton>
-          <Modal.Title>CREATE HABIT</Modal.Title>
+          <Modal.Title>CREATE GOAL</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-				<FormContainer>
+            <FormContainer>
 					<InputSection>
-						<label htmlFor='habitName'>Name</label>
+						<label htmlFor='goalName'>Goal</label>
 						<input 
 							type="text"
-							id="habitName"
-							placeholder='Name'
+							id="goalName"
+							placeholder='goal'
 							maxLength="25"
-							value={habitName}
-							onChange={(e) => setHabitName(e.target.value)}
-						/>
-						<label htmlFor='habitDaily'>Daily Habit?</label>
-						<input 
-							type="text"
-							id="habitDaily"
-							placeholder='type true or false'
-							maxLength="25"
-							value={habitDaily}
-							onChange={(e) => setHabitDaily(e.target.value)}
-						/>
-						<label htmlFor='habitWeekly'>Weekly Habit?</label>
-						<input 
-							type="text"
-							id="habitWeekly"
-							placeholder='type true or false'
-							maxLength="25"
-							value={habitWeekly}
-							onChange={(e) => setHabitWeekly(e.target.value)}
-						/>
-						<label htmlFor='habitMonthly'>Monthly Habit?</label>
-						<input 
-							type="text"
-							id="habitMonthly"
-							placeholder='type true or false'
-							maxLength="25"
-							value={habitMonthly}
-							onChange={(e) => setHabitMonthly(e.target.value)}
+							value={goalName}
+							onChange={(e) => setGoalName(e.target.value)}
 						/>
 					</InputSection>
 						<ButtonContainer>
-							<SubmitButton type='submit' onClick={(e) => handleSubmit(habitName, habitDaily, habitWeekly, habitMonthly)}>
-								CREATE HABIT
+							<SubmitButton type='submit' onClick={(e) => handleSubmit(goalName)}>
+								CREATE GOAL
 							</SubmitButton>
 						</ButtonContainer>
 				</FormContainer>
             </Modal.Body>
         </Modal>
-	</NewHabitContainer>
+	</NewGoalContainer>
   )
 }
 
-export default NewHabitModal
+export default NewGoalModal

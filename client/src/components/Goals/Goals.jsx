@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import getGoals from './GoalsSlice';
 import EditGoalModal from '../EditGoal/EditGoalModal';
+import NewGoalModal from '../NewGoal/NewGoalModal';
 
 const GoalsContainer = styled.div`
     display: flex;
@@ -115,12 +116,17 @@ const Goals = ({user}) => {
 			console.log(data)})
     }
 
+	function handleAddGoal(newGoal) {
+		setGoals([...goals, newGoal])
+	}
+
 	return (
 		<GoalsContainer>
 			<GoalsHeader>
 				<TitleSection>goals</TitleSection>
 				<AddGoalButton>
-					<StyledLink to='/newGoal'><img src='images/add.png' alt="add-goal-btn" />add a goal</StyledLink>
+					<NewGoalModal user={user} handleAddGoal={handleAddGoal}/>
+					{/* <StyledLink to='/newGoal'><img src='images/add.png' alt="add-goal-btn" />add a goal</StyledLink> */}
 				</AddGoalButton>
 			</GoalsHeader>
 				{goals.map((goal, index) => (
