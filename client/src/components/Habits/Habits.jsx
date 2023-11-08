@@ -582,7 +582,7 @@ const Habits = ({user}) => {
 					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" checked={habit.day3} onClick={(e) => handleCheck(habit, "day3")}/></td>
 					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" checked={habit.day4} onClick={(e) => handleCheck(habit, "day4")}/></td> */}
 
-
+					{/*habit.h_entries.map((entry) => (<td checked={entry.completed} /> */}
 					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="day1" checked={habit.habit_entries.some(entry => {entry.entry_performed_date == "day1"})} onClick={(e) => handleClick(habit, e.target.value)}/></td>
 					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
 					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
