@@ -263,7 +263,7 @@ class HabitEntriesById(Resource):
         return make_response({}, 204)
 
     def patch(self, id):
-        entry = HabitEntry.query.filter(Entry.id == id).first()
+        entry = HabitEntry.query.filter_by(id=id).first()
         if not entry:
             return make_response({"error": ["entry not found"]}, 404)
         try:
