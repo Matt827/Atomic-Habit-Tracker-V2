@@ -78,7 +78,7 @@ const StyledLink = styled(Link)`
   font-weight: bold;
 `;
 
-const NewGoalForm = () => {
+const NewGoalForm = ({user}) => {
     const [goalName, setGoalName] = useState("")
     const navigate = useNavigate();
 
@@ -90,6 +90,7 @@ const NewGoalForm = () => {
             },
             body: JSON.stringify({
                 goal: goalName,
+                user_id: user.id,
             })
         })
         .then(res => res.json())

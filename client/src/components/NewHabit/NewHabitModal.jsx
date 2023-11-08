@@ -21,6 +21,10 @@ const NewHabitContainer = styled.div`
   img {
     cursor: pointer;
   }
+  button {
+	background-color: transparent;
+	border: none;
+  }
 `;
 
 const FormTitle = styled.div`
@@ -76,7 +80,7 @@ const SubmitButton = styled.div`
   }
 `;
 
-const NewHabitModal = ({user}) => {
+const NewHabitModal = ({user, handleAddDailyHabit}) => {
     const [habitName, setHabitName] = useState("")
     const [habitDaily, setHabitDaily] = useState("")
     const [habitWeekly, setHabitWeekly] = useState("")
@@ -103,14 +107,14 @@ const NewHabitModal = ({user}) => {
         })
         .then(res => res.json())
         .then(data => {
-          user.habits.push(data)
           console.log(data)
+		  handleAddDailyHabit(data)
           handleClose()
         })
     }
   return (
     <NewHabitContainer>
-        <button onClick={handleShow}><img src='images/add.png' alt="edit-habit-btn"/>ADD A GOAL</button>
+        <button onClick={handleShow}><img src='images/add.png' alt="edit-habit-btn"/>ADD A HABIT</button>
         
         <Modal
         show={show}

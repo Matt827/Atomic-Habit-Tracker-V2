@@ -67,7 +67,7 @@ const goalNameStyle = {
 }
 
 
-const Goals = () => {
+const Goals = ({user}) => {
 	const [goals, setGoals] = useState([])
 
 	function handleDeleteGoals(deletedGoal) {
@@ -92,7 +92,15 @@ const Goals = () => {
     useEffect(() => {
         fetch("/goals")
         .then(res => res.json())
-        .then(goals => {setGoals(goals)})
+        .then(goals => {
+			const userGoals =[]
+			goals.forEach(goal => {
+				if (goal.user_id === user.id) {
+					userGoals.push(goal)
+				}
+			})
+			setGoals(userGoals)
+		})
     }, [])
 
 	const handleDelete = (goal) => {

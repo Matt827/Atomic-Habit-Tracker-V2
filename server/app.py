@@ -188,6 +188,7 @@ class Goals(Resource):
         try:
             goal = Goal(
                 goal=request.json["goal"],
+                user_id=request.json["user_id"],
             )
             db.session.add(goal)
             db.session.commit()
