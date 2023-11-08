@@ -359,14 +359,27 @@ const Habits = ({user}) => {
 	const [dailyHabits, setDailyHabits] = useState([])
 	const [weeklyHabits, setWeeklyHabits] = useState([])
 	const [monthlyHabits, setMonthlyHabits] = useState([])
-	const [userHabits, setUserHabits] = useState([])
+	const [userHabitEntries, setUserHabitEntries] = useState([])
+
+	useEffect(() => {
+		const entryList = []
+		user.h_entries.forEach(entry => {
+			entryList.push(entry)
+		})
+		setUserHabitEntries(entryList)
+	}, [])
 
 	useEffect(() => {
 		fetch("/habits")
 		.then(res => res.json())
         .then(data => {
-			console.log(data)
-			setUserHabits(data)
+			const dailyHabits = []
+			data.forEach(habit => {
+				if (habit.daily === "true") {
+					dailyHabits.push(habit)
+				}
+			})
+			setDailyHabits(dailyHabits)
 		})
 	}, [])
 
@@ -386,38 +399,38 @@ const Habits = ({user}) => {
 		setMonthlyHabits(updatedHabits)
 	}
 
-	useEffect(() => {
-		const DailyHabitList = []
-		user.habits.forEach(habit => {
-			if (habit.daily == 'true') {
-				DailyHabitList.push(habit)
-			}
-		})
+	// useEffect(() => {
+	// 	const DailyHabitList = []
+	// 	user.habits.forEach(habit => {
+	// 		if (habit.daily == 'true') {
+	// 			DailyHabitList.push(habit)
+	// 		}
+	// 	})
 		
-		setDailyHabits(DailyHabitList)
-	}, [])
+	// 	setDailyHabits(DailyHabitList)
+	// }, [])
 
-	useEffect(() => {
-		const weeklyHabitList = []
-		user.habits.forEach(habit => {
-			if (habit.weekly == 'true') {
-				weeklyHabitList.push(habit)
-			}
-		})
+	// useEffect(() => {
+	// 	const weeklyHabitList = []
+	// 	user.habits.forEach(habit => {
+	// 		if (habit.weekly == 'true') {
+	// 			weeklyHabitList.push(habit)
+	// 		}
+	// 	})
 		
-		setWeeklyHabits(weeklyHabitList)
-	}, [])
+	// 	setWeeklyHabits(weeklyHabitList)
+	// }, [])
 
-	useEffect(() => {
-		const monthlyHabitList = []
-		user.habits.forEach(habit => {
-			if (habit.monthly == 'true') {
-				monthlyHabitList.push(habit)
-			}
-		})
+	// useEffect(() => {
+	// 	const monthlyHabitList = []
+	// 	user.habits.forEach(habit => {
+	// 		if (habit.monthly == 'true') {
+	// 			monthlyHabitList.push(habit)
+	// 		}
+	// 	})
 		
-		setMonthlyHabits(monthlyHabitList)
-	}, [])
+	// 	setMonthlyHabits(monthlyHabitList)
+	// }, [])
 
 	const handleDelete = (habit) => {
 		handleDeleteDailyHabit(habit)
@@ -513,7 +526,7 @@ const Habits = ({user}) => {
         .then(res => res.json())
         .then(data => {
 			console.log(data)
-			setUserHabits([...userHabits, data])
+			// setUserHabits([...userHabits, data])
 		})
 	}
 
@@ -582,8 +595,8 @@ const Habits = ({user}) => {
 					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" checked={habit.day3} onClick={(e) => handleCheck(habit, "day3")}/></td>
 					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" checked={habit.day4} onClick={(e) => handleCheck(habit, "day4")}/></td> */}
 
+					{/* <td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="day1" checked={habit.habit_entries.some(entry => {entry.entry_performed_date == "day1"})} onClick={(e) => handleClick(habit, e.target.value)}/></td> */}
 
-					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="day1" checked={habit.habit_entries.some(entry => {entry.entry_performed_date == "day1"})} onClick={(e) => handleClick(habit, e.target.value)}/></td>
 					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
 					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>
 					<td style={week1BoxStyle}><input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="monday" onClick={(e) => handleClick(habit, e.target.value)}/></td>

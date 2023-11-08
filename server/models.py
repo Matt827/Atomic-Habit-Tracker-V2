@@ -1,10 +1,10 @@
+from config import bcrypt, db
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
+from sqlalchemy_serializer import SerializerMixin
 
-from config import db, bcrypt
 
 class HabitEntry(db.Model, SerializerMixin):
     __tablename__ = "habit_entries"
@@ -13,12 +13,20 @@ class HabitEntry(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     habit_id = db.Column(db.Integer, db.ForeignKey("habits.id"))
     entry_performed_date = db.Column(db.String)
+    completed = db.Column(db.Boolean, default=False)
 
+    user = db.relationship("User", back_populates="h_entries")
+    habit = db.relationship("Habit", back_populates="h_entries")
 
-    # serialize_rules = ("-users.habit_entries", "-habits.habit_entries", "-goals.habit_entries", )
+    serialize_rules = (
+        "-user.h_entries",
+        "-habit.h_entries",
+        "-goals.habit_entries",
+    )
 
     def __repr__(self):
         return f"<HabitEntry {self.id}>"
+
 
 class Habit(db.Model, SerializerMixin):
     __tablename__ = "habits"
@@ -30,52 +38,21 @@ class Habit(db.Model, SerializerMixin):
     weekly = db.Column(db.String)
     monthly = db.Column(db.String)
     yearly = db.Column(db.String)
-    day1 = db.Column(db.String)
-    day2 = db.Column(db.String)
-    day3 = db.Column(db.String)
-    day4 = db.Column(db.String)
-    day5 = db.Column(db.String)
-    day6 = db.Column(db.String)
-    day7 = db.Column(db.String)
-    day8 = db.Column(db.String)
-    day9 = db.Column(db.String)
-    day10 = db.Column(db.String)
-    day11 = db.Column(db.String)
-    day12 = db.Column(db.String)
-    day13 = db.Column(db.String)
-    day14 = db.Column(db.String)
-    day15 = db.Column(db.String)
-    day16 = db.Column(db.String)
-    day17 = db.Column(db.String)
-    day18 = db.Column(db.String)
-    day19 = db.Column(db.String)
-    day20 = db.Column(db.String)
-    day21 = db.Column(db.String)
-    day22 = db.Column(db.String)
-    day23 = db.Column(db.String)
-    day24 = db.Column(db.String)
-    day25 = db.Column(db.String)
-    day26 = db.Column(db.String)
-    day27 = db.Column(db.String)
-    day28 = db.Column(db.String)
-    day29 = db.Column(db.String)
-    day30 = db.Column(db.String)
-    day31 = db.Column(db.String)
-    week1 = db.Column(db.String)
-    week2 = db.Column(db.String)
-    week3 = db.Column(db.String)
-    week4 = db.Column(db.String)
-    month1 = db.Column(db.String)
 
     # users = db.relationship(
     #     'User', secondary="habit_entries", back_populates='habits')
 
-    habit_entries = db.relationship(
-        "HabitEntry", backref="habit", cascade="all, delete")
+    h_entries = db.relationship(
+        "HabitEntry", back_populates="habit", cascade="all, delete"
+    )
 
-    users = association_proxy("habit_entries", "user")
+    # users = association_proxy("habit_entries", "user")
 
-    serialize_rules = ("-habit_entries.habit", "-habit_entries.user", "-users.habits",)
+    serialize_rules = (
+        "-h_entries.habit",
+        "-h_entries.user",
+        "-users.habits",
+    )
 
     @validates("name")
     def validate_name(self, key, name):
@@ -86,6 +63,7 @@ class Habit(db.Model, SerializerMixin):
     def __repr__(self):
         return f"<Habit {self.name}>"
 
+
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
@@ -94,7 +72,8 @@ class User(db.Model, SerializerMixin):
     age = db.Column(db.Integer)
     _password_hash = db.Column(db.String)
     image_url = db.Column(db.String)
-    goal_id = db.Column(db.String)
+
+    goals = db.relationship("Goal", backref="user", cascade="all, delete")
 
     # habits = db.relationship(
     #     'Habit', secondary="habit_entries", back_populates='users')
@@ -102,12 +81,19 @@ class User(db.Model, SerializerMixin):
     # goals = db.relationship(
     #     'Goal', secondary="habit_entries", back_populates='users')
 
-    habit_entries = db.relationship(
-        "HabitEntry", backref="user", cascade="all, delete")
+    h_entries = db.relationship(
+        "HabitEntry", back_populates="user", cascade="all, delete"
+    )
 
-    habits = association_proxy("habit_entries", "habit")
+    habits = association_proxy("h_entries", "habit")
 
-    serialize_rules = ("-habit_entries.user", "-habit_entries.habit", "-habits.users", )
+    serialize_rules = (
+        "-h_entries.user",
+        "-h_entries.habit",
+        "-habits.users",
+        "-users.habits",
+        "-goals.user",
+    )
 
     @validates("username")
     def validate_name(self, key, username):
@@ -121,23 +107,22 @@ class User(db.Model, SerializerMixin):
 
     @password_hash.setter
     def password_hash(self, password):
-        password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
-        self._password_hash = password_hash.decode('utf-8')
+        password_hash = bcrypt.generate_password_hash(password.encode("utf-8"))
+        self._password_hash = password_hash.decode("utf-8")
 
     def authenticate(self, password):
-        return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
+        return bcrypt.check_password_hash(self._password_hash, password.encode("utf-8"))
 
     def __repr__(self):
         return f"<User {self.username}>"
+
 
 class Goal(db.Model, SerializerMixin):
     __tablename__ = "goals"
 
     id = db.Column(db.Integer, primary_key=True)
-    goal = db.Column(db.String, db.ForeignKey("users.id"))
-
-    users = db.relationship(
-        'User', backref="goals", cascade="all, delete")
+    goal = db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     # habit_entries = db.relationship(
     #     "HabitEntry", backref="habit", cascade="all, delete")
@@ -153,6 +138,7 @@ class Goal(db.Model, SerializerMixin):
     def __repr__(self):
         return f"<Goal {self.goal}>"
 
+
 class EntryDate(db.Model, SerializerMixin):
     __tablename__ = "entry_dates"
 
@@ -161,7 +147,8 @@ class EntryDate(db.Model, SerializerMixin):
     habit_entry_id = db.Column(db.Integer, db.ForeignKey("habit_entries.id"))
 
     habit_entries = db.relationship(
-        "HabitEntry", backref="entry_date", cascade="all, delete")
+        "HabitEntry", backref="entry_date", cascade="all, delete"
+    )
 
     serialize_rules = ("-habit_entries.entry_date",)
 

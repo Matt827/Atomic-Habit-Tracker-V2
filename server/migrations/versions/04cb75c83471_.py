@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 92cef021a825
+Revision ID: 04cb75c83471
 Revises: 
-Create Date: 2023-11-07 15:24:56.230996
+Create Date: 2023-11-07 19:41:15.811098
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '92cef021a825'
+revision = '04cb75c83471'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -26,42 +26,6 @@ def upgrade():
     sa.Column('weekly', sa.String(), nullable=True),
     sa.Column('monthly', sa.String(), nullable=True),
     sa.Column('yearly', sa.String(), nullable=True),
-    sa.Column('day1', sa.String(), nullable=True),
-    sa.Column('day2', sa.String(), nullable=True),
-    sa.Column('day3', sa.String(), nullable=True),
-    sa.Column('day4', sa.String(), nullable=True),
-    sa.Column('day5', sa.String(), nullable=True),
-    sa.Column('day6', sa.String(), nullable=True),
-    sa.Column('day7', sa.String(), nullable=True),
-    sa.Column('day8', sa.String(), nullable=True),
-    sa.Column('day9', sa.String(), nullable=True),
-    sa.Column('day10', sa.String(), nullable=True),
-    sa.Column('day11', sa.String(), nullable=True),
-    sa.Column('day12', sa.String(), nullable=True),
-    sa.Column('day13', sa.String(), nullable=True),
-    sa.Column('day14', sa.String(), nullable=True),
-    sa.Column('day15', sa.String(), nullable=True),
-    sa.Column('day16', sa.String(), nullable=True),
-    sa.Column('day17', sa.String(), nullable=True),
-    sa.Column('day18', sa.String(), nullable=True),
-    sa.Column('day19', sa.String(), nullable=True),
-    sa.Column('day20', sa.String(), nullable=True),
-    sa.Column('day21', sa.String(), nullable=True),
-    sa.Column('day22', sa.String(), nullable=True),
-    sa.Column('day23', sa.String(), nullable=True),
-    sa.Column('day24', sa.String(), nullable=True),
-    sa.Column('day25', sa.String(), nullable=True),
-    sa.Column('day26', sa.String(), nullable=True),
-    sa.Column('day27', sa.String(), nullable=True),
-    sa.Column('day28', sa.String(), nullable=True),
-    sa.Column('day29', sa.String(), nullable=True),
-    sa.Column('day30', sa.String(), nullable=True),
-    sa.Column('day31', sa.String(), nullable=True),
-    sa.Column('week1', sa.String(), nullable=True),
-    sa.Column('week2', sa.String(), nullable=True),
-    sa.Column('week3', sa.String(), nullable=True),
-    sa.Column('week4', sa.String(), nullable=True),
-    sa.Column('month1', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('users',
@@ -70,14 +34,14 @@ def upgrade():
     sa.Column('age', sa.Integer(), nullable=True),
     sa.Column('_password_hash', sa.String(), nullable=True),
     sa.Column('image_url', sa.String(), nullable=True),
-    sa.Column('goal_id', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('username')
     )
     op.create_table('goals',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('goal', sa.String(), nullable=True),
-    sa.ForeignKeyConstraint(['goal'], ['users.id'], name=op.f('fk_goals_goal_users')),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_goals_user_id_users')),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('habit_entries',
@@ -85,6 +49,7 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('habit_id', sa.Integer(), nullable=True),
     sa.Column('entry_performed_date', sa.String(), nullable=True),
+    sa.Column('completed', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['habit_id'], ['habits.id'], name=op.f('fk_habit_entries_habit_id_habits')),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_habit_entries_user_id_users')),
     sa.PrimaryKeyConstraint('id')
